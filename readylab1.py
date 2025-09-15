@@ -13,14 +13,14 @@ from scipy.integrate import quad
 #-----------------------------------------------------------------------
 #                 Функция f(t)=5sin(wt) и ее график
 t = symbols('t')
-w = 1 #Циклическая частота, можно поменять, она будет распространяться на весь код
+w = 1 #Циклическая частота [рад/с], можно поменять, она будет распространяться на весь код
 f = 5*sin(w*t)
 
 # Согласно заданию, нужно отрисовать на нескольких периодах, так и сделаем
 period = 2 * np.pi
 num_periods = 3
-start_time = -num_periods * period / 2
-end_time = num_periods * period / 2
+start_time = 0.0 #изменено 15.09.25 , t теперь >= 0
+end_time = num_periods * period
 
 t_values = np.linspace(start_time, end_time, 500)
 f_numeric = np.vectorize(lambda t_values: f.subs(t, t_values).evalf())
@@ -31,12 +31,12 @@ plt.figure(figsize=(10, 5))
 plt.plot(t_values, f_values)
 plt.xlabel('t,с')
 plt.ylabel('f(t)')
-plt.title('График периодической функции f(t) = 5sin(wt)')
+plt.title('График периодической функции f(t) = $5sin(\omega t)$')
 plt.grid(True)
 plt.show()
 
 #-----------------------------------------------------------------------
-#                 Функция g(t) = 5*sin(w*t) + 10*cos(2*t) + 3*sin(3t) + 6*cos(4t) и ее график
+#                 Функция g(t) = 5sin(1t) + 10cos(2t) + 3sin(3t) + 6cos(4t) и ее график
 g = 5*sin(w*t) + 10*cos(2*t) + 3*sin(3*t) + 6*cos(4*t)
 
 g_numeric = np.vectorize(lambda t_values: g.subs(t, t_values).evalf())
@@ -79,7 +79,7 @@ integrand = lambda t : (2/T)*(5*sin(t) + 10*cos(2*t) + 3*sin(3*t) + 6*cos(4*t))
 integral, integral_error = quad(integrand, 0, T)
 half_a_0 = integral/2
 
-print(f'a_0/2 = ', {half_a_0})
+#print(f'a_0/2 = ', {half_a_0})
 
 #------------------------------------------------------------------------
 #                                     Ищем a_n
@@ -91,7 +91,9 @@ for n in range(N):
 #print(f"a)
 #print(pd.DataFrame(a))
 print('a_n = ')
-print(a)
+#print(a)
+for coef in a:
+  print(f'{coef:.0f}')
 
 #------------------------------------------------------------------------
 #                                     Ищем b_n
@@ -101,8 +103,10 @@ for n in range(N):
   integral, integral_error = quad(integrand, 0, T)
   b[n] = integral*2/T
 print('b_n = ')
-print(b)
+#print(b)
 #print(pd.DataFrame(b))
+for coef in b:
+  print(f'{coef:.0f}')
 
 #------------------------------------------------------------------------
 #                                     Ищем A_n
@@ -110,7 +114,10 @@ print(b)
 An = np.sqrt(a**2 + b**2) #Сначала думал там нужно по индексам, но pandas сам все сделал, я проверил, все ок
 
 #print(pd.DataFrame(An))
+print('A_n = ')
 
+for coef in An:
+  print(f'{coef:.0f}')
 #------------------------------------------------------------------------
 #                                 Строим АЧХ A_n(w_n)
 w_n = np.zeros(N)
@@ -122,8 +129,8 @@ for n in range(N):
 #Рисуем АЧХ
 plt.figure(figsize=(10, 5))
 plt.stem(w_n, An.flatten()) # An is already a NumPy array, use flatten() for safety
-plt.xlabel('w_n, Гц')
-plt.ylabel('An')
+plt.xlabel('$w_n$, Гц')
+plt.ylabel('$An$')
 plt.title('График зависимости $A_n$ от $\omega_n$')
 plt.xticks(np.arange(0, N)) # Set x-ticks to show all integer values from 0 to N-1
 plt.grid(axis='y') # Add grid lines for the y-axis
