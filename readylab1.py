@@ -36,8 +36,8 @@ plt.grid(True)
 plt.show()
 
 #-----------------------------------------------------------------------
-#                 Функция g(t) = 5sin(1t) + 10cos(2t) + 3sin(3t) + 6cos(4t) и ее график
-g = 5*sin(w*t) + 10*cos(2*t) + 3*sin(3*t) + 6*cos(4*t)
+#                 Функция g(t) = 5sin(1t) + 10cos(2t) + 3sin(3t) + 6cos(4t) + 10 и ее график
+g = 5*sin(w*t) + 10*cos(2*t) + 3*sin(3*t) + 6*cos(4*t) + 10.0
 
 g_numeric = np.vectorize(lambda t_values: g.subs(t, t_values).evalf())
 
@@ -48,13 +48,13 @@ plt.figure(figsize=(10, 5))
 plt.plot(t_values, g_values)
 plt.xlabel('t,с')
 plt.ylabel('g(t)')
-plt.title('График периодической функции $g(t) = 5 sin(\omega t) + 10 cos(2 \omega t) + 3 sin(3 \omega t) + 6 cos(4 \omega t)$')
+plt.title('График периодической функции $g(t) = 5 sin(\omega t) + 10 cos(2 \omega t) + 3 sin(3 \omega t) + 6 cos(4 \omega t) + 10$')
 plt.grid(True)
 plt.show()
 
 #------------------------------------------------------------------------
 #                        Табулирование функции g(t) в пределах периода.
-N=10 #можно подобрать и другое N
+N=5 #можно подобрать и другое N
 T=2*pi
 i = np.array(range(N))
 deltha_T = T / N
@@ -75,7 +75,7 @@ def G(a): #=Y(t_n)
 
 #------------------------------------------------------------------------
 #                                     Ищем a_0/2
-integrand = lambda t : (2/T)*(5*sin(t) + 10*cos(2*t) + 3*sin(3*t) + 6*cos(4*t))
+integrand = lambda t : (2/T)*(5*sin(t) + 10*cos(2*t) + 3*sin(3*t) + 6*cos(4*t) + 10.0)
 integral, integral_error = quad(integrand, 0, T)
 half_a_0 = integral/2
 
@@ -85,7 +85,7 @@ half_a_0 = integral/2
 #                                     Ищем a_n
 a = np.zeros(N)
 for n in range(N):
-  integrand = lambda t : (5*sin(w*t) + 10*cos(2*w*t) + 3*sin(3*w*t) + 6*cos(4*w*t))*cos(n*w*t)
+  integrand = lambda t : (5*sin(w*t) + 10*cos(2*w*t) + 3*sin(3*w*t) + 6*cos(4*w*t) + 10.0)*cos(n*w*t)
   integral, integral_error = quad(integrand, 0, T)
   a[n] = integral*2/T
 #print(f"a)
@@ -99,7 +99,7 @@ for coef in a:
 #                                     Ищем b_n
 b = np.zeros(N)
 for n in range(N):
-  integrand = lambda t : (5*sin(t) + 10*cos(2*t) + 3*sin(3*t) + 6*cos(4*t))*sin(n*w*t)
+  integrand = lambda t : (5*sin(t) + 10*cos(2*t) + 3*sin(3*t) + 6*cos(4*t) + 10.0)*sin(n*w*t)
   integral, integral_error = quad(integrand, 0, T)
   b[n] = integral*2/T
 print('b_n = ')
